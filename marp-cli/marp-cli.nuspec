@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- == PACKAGE SPECIFIC SECTION == -->
+    <id>marp-cli</id>
+    <version>0.17.0</version>
+    <packageSourceUrl>https://github.com/zverev-iv/choco-marp-cli</packageSourceUrl>
+    <owners>zverev-iv</owners>
+    <!-- == SOFTWARE SPECIFIC SECTION == -->
+    <title>marp-cli (Install)</title>
+    <authors>Marp Team, Yuki Hattori</authors>
+    <projectUrl>https://marp.app/</projectUrl>
+    <iconUrl>https://cdn.statically.io/gh/marp-team/marp/d4a02dfb/marp.png</iconUrl>
+    <copyright>2019 Marp Team</copyright>
+    <licenseUrl>https://cdn.statically.io/gh/marp-team/marp/d4a02dfb/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/marp-team/marp-cli</projectSourceUrl>
+    <docsUrl>https://cdn.statically.io/gh/marp-team/marp-cli/master/README.md</docsUrl>
+    <bugTrackerUrl>https://github.com/marp-team/marp-cli/issues</bugTrackerUrl>
+    <tags>marp-cli marp markup markdown presentation html pdf pptx powerpoint png images</tags>
+    <summary>A CLI interface, for Marp (using @marp-team/marp-core) and any slide deck converter based on Marpit framework.</summary>
+    <description>It can convert Marp / Marpit Markdown files into static HTML / CSS, PDF, PowerPoint document, and image(s) easily.</description>
+    <releaseNotes>https://github.com/marp-team/marp-cli/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
