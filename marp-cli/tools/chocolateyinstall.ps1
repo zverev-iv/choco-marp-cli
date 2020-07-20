@@ -1,4 +1,4 @@
-https://github.com/marp-team/marp-cli/releases/download/v0.17.4/marp-cli-v0.17.4-win.zip﻿$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url        = 'https://github.com/marp-team/marp-cli/releases/download/v0.17.4/marp-cli-v0.17.4-win.zip'
 
