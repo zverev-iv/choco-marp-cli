@@ -1,13 +1,13 @@
 $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/marp-team/marp-cli/releases/download/v0.21.0/marp-cli-v0.21.0-win.zip'
+$url        = 'https://github.com/marp-team/marp-cli/releases/download/v0.21.1/marp-cli-v0.21.1-win.zip'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = $toolsDir
   url           = $url
   softwareName  = 'marp-cli*'
-  checksum      = 'b9a7cff28af28e2b1dfa51abdf374fa86009d4796d1930bf121c0ee79dd656ed'
+  checksum      = '9338bb9e371c7829dddc2f6cac6be00ab10163c8680ff943f33be26684f38860'
   checksumType  = 'sha256'
 }
 
