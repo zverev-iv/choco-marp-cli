@@ -7,7 +7,7 @@
     <packageSourceUrl>https://github.com/zverev-iv/choco-marp-cli</packageSourceUrl>
     <owners>zverev-iv</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
-    <title>marp-cli (Install)</title>
+    <title>marp-cli</title>
     <authors>Marp Team, Yuki Hattori</authors>
     <projectUrl>https://marp.app/</projectUrl>
     <iconUrl>https://cdn.statically.io/gh/marp-team/marp/d4a02dfb/marp.png</iconUrl>
