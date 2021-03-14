@@ -3,7 +3,7 @@
   <metadata>
     <!-- == PACKAGE SPECIFIC SECTION == -->
     <id>marp-cli</id>
-    <version>0.23.0</version>
+    <version>0.23.1</version>
     <packageSourceUrl>https://github.com/zverev-iv/choco-marp-cli</packageSourceUrl>
     <owners>zverev-iv</owners>
     <!-- == SOFTWARE SPECIFIC SECTION == -->
