@@ -3,9 +3,9 @@ $ErrorActionPreference = 'Stop';
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-  url           = "https://github.com/marp-team/marp-cli/releases/download/v0.23.1/marp-cli-v0.23.1-win.zip"
+  url           = "https://github.com/marp-team/marp-cli/releases/download/v0.23.2/marp-cli-v0.23.2-win.zip"
   softwareName  = "marp-cli*"
-  checksum      = "A26623A3FB608C00482F57BB7AA294968D128890EB0564DE9EC8EA06B5743AB0"
+  checksum      = "E95AF343186AE7C6271BDA12DEA4F27DF649589A4A01BB00544E6E5183DDA7E2"
   checksumType  = "sha256"
 }
 

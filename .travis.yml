@@ -1,10 +1,10 @@
-os: windows
-language: shell
+os: linux
+dist: xenial
+language: csharp
+mono: none
 branches:
   only:
   - master
 script:
-- choco pack marp-cli\\marp-cli.nuspec
-after_script:
-- choco apikey --key $CHOCOAPIKEY --source https://push.chocolatey.org/
-- choco push
+  - dotnet tool restore
+  - dotnet cake
