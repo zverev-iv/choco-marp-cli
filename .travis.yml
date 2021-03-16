@@ -1,8 +1,8 @@
 os: linux
 dist: xenial
 language: csharp
-dotnet: 3.1.202
-mono: none
+dotnet: 5.0.201
+mono: latest
 branches:
   only:
   - master

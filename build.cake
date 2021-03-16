@@ -37,14 +37,17 @@ var packageInfo = new ChocolateyPackSettings {
     Description              = "It can convert Marp / Marpit Markdown files into static HTML / CSS, PDF, PowerPoint document, and image(s) easily.",
     ReleaseNotes             = new [] {"https://github.com/marp-team/marp-cli/releases"},
     Files                    = new [] {
-        new ChocolateyNuSpecContent {Source = "src\\**", Target = "tools"}
-        }
+        new ChocolateyNuSpecContent {Source = System.IO.Path.Combine("src", "**"), Target = "tools"}
+        },
+	Debug = true,
+	Verbose = true
     };
 
 Task("Clean")
     .Does(() =>
 {
-    DeleteFiles("./*.nupkg");
+    DeleteFiles("./**/*.nupkg");
+	DeleteFiles("./**/*.nuspec");
 });
 
 Task("Pack")
