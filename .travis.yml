@@ -1,11 +1,7 @@
-os: linux
-dist: xenial
-language: csharp
-dotnet: 5.0.201
-mono: latest
+os: windows
+language: shell
 branches:
   only:
   - master
 script:
-  - dotnet tool restore
-  - dotnet cake
+- powershell .\build.ps1
