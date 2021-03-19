@@ -8,11 +8,11 @@ on:
 
 jobs:
   publish:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: run cake
         env:
           CHOCOAPIKEY: ${{ secrets.CHOCOAPIKEY }}
-        run: powershell .\\build.ps1
+        run: ./build.sh
