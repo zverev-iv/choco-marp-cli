@@ -1,4 +1,4 @@
-name: CI
+name: Publish
  
 on:
   push:
@@ -13,4 +13,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: run cake
+        env:
+          CHOCOAPIKEY: ${{ secrets.CHOCOAPIKEY }}
         run: powershell .\\build.ps1
