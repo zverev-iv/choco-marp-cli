@@ -8,7 +8,7 @@
 
 ## Install
 
-```sh
+``` sh
 choco install marp-cli
 ```
 

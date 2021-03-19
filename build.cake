@@ -9,7 +9,7 @@ var packageInfo = new ChocolateyPackSettings {
     //SOFTWARE SPECIFIC SECTION
     Title                    = "marp-cli",
     Authors                  = new[] {
-        "Marp Team", 
+        "Marp Team",
         "Yuki Hattori"
         },
     Copyright                = "2021 Marp Team",
@@ -27,7 +27,7 @@ var packageInfo = new ChocolateyPackSettings {
         new ChocolateyNuSpecContent {Source = System.IO.Path.Combine("src", "**"), Target = "tools"}
         },
     Tags                     = new [] {
-        "marp-cli", 
+        "marp-cli",
         "marp",
         "markup",
         "markdown",
