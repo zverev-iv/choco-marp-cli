@@ -3,7 +3,7 @@ var target = Argument("target", "Publish");
 var packageInfo = new ChocolateyPackSettings {
     //PACKAGE SPECIFIC SECTION
     Id                       = "marp-cli",
-    Version                  = "0.23.3",
+    Version                  = "1.4.2",
     PackageSourceUrl         = new Uri("https://github.com/zverev-iv/choco-marp-cli"),
     Owners                   = new[] {"zverev-iv"},
     //SOFTWARE SPECIFIC SECTION
