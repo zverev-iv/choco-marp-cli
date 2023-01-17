@@ -1,4 +1,5 @@
 #addin nuget:?package=Cake.FileHelpers&version=4.0.1
+#addin nuget:?package=Cake.Json&version=7.0.1
 
 #load "lib/PackageInfo.cs"
 
@@ -12,11 +13,7 @@ var target = Argument("target", "Publish");
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
 
-Setup<PackageInfo>(setupContext => new PackageInfo
-{
-    PackageVersion = Argument("packageVersion", "2.2.2"),
-    Package32Url = Argument("url", "https://github.com/marp-team/marp-cli/releases/download/v2.2.2/marp-cli-v2.2.2-win.zip")
-});
+Setup<PackageInfo>(setupContext => DeserializeJsonFromFile<PackageInfo>("config.json"));
 
 Teardown(ctx =>
 {
@@ -46,6 +43,12 @@ Task("Clean")
         Force = true
         });
     }
+});
+
+Task("export info")
+    .Does<PackageInfo>(data =>
+{
+	Information(SerializeJson<PackageInfo>(data));
 });
 
 Task(".gitignore clean")
