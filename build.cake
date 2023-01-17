@@ -1,70 +1,145 @@
+#addin nuget:?package=Cake.FileHelpers&version=4.0.1
+
+#load "lib/PackageInfo.cs"
+
+///////////////////////////////////////////////////////////////////////////////
+// ARGUMENTS
+///////////////////////////////////////////////////////////////////////////////
+
 var target = Argument("target", "Publish");
 
-var packageInfo = new ChocolateyPackSettings {
-    //PACKAGE SPECIFIC SECTION
-    Id                       = "marp-cli",
-    Version                  = "1.5.1",
-    PackageSourceUrl         = new Uri("https://github.com/zverev-iv/choco-marp-cli"),
-    Owners                   = new[] {"zverev-iv"},
-    //SOFTWARE SPECIFIC SECTION
-    Title                    = "marp-cli",
-    Authors                  = new[] {
-        "Marp Team",
-        "Yuki Hattori"
-        },
-    Copyright                = "2021 Marp Team",
-    ProjectUrl               = new Uri("https://marp.app/"),
-    ProjectSourceUrl         = new Uri("https://github.com/marp-team/marp-cli"),
-    DocsUrl                  = new Uri("https://cdn.statically.io/gh/marp-team/marp-cli/master/README.md"),
-    BugTrackerUrl            = new Uri("https://github.com/marp-team/marp-cli/issues"),
-    IconUrl                  = new Uri("https://cdn.statically.io/gh/marp-team/marp/d4a02dfb/marp.png"),
-    LicenseUrl               = new Uri("https://cdn.statically.io/gh/marp-team/marp/d4a02dfb/LICENSE"),
-    RequireLicenseAcceptance = false,
-    Summary                  = "A CLI interface, for Marp (using @marp-team/marp-core) and any slide deck converter based on Marpit framework.",
-    Description              = "It can convert Marp / Marpit Markdown files into static HTML / CSS, PDF, PowerPoint document, and image(s) easily.",
-    ReleaseNotes             = new [] {"https://github.com/marp-team/marp-cli/releases"},
-    Files                    = new [] {
-        new ChocolateyNuSpecContent {Source = System.IO.Path.Combine("src", "**"), Target = "tools"}
-        },
-    Tags                     = new [] {
-        "marp-cli",
-        "marp",
-        "markup",
-        "markdown",
-        "presentation",
-        "html",
-        "pdf",
-        "pptx",
-        "powerpoint",
-        "png",
-        "images"
-        }
-    };
+///////////////////////////////////////////////////////////////////////////////
+// SETUP / TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
+
+Setup<PackageInfo>(setupContext => new PackageInfo
+{
+    PackageVersion = Argument("packageVersion", "2.2.2"),
+    Package32Url = Argument("url", "https://github.com/marp-team/marp-cli/releases/download/v2.2.2/marp-cli-v2.2.2-win.zip")
+});
+
+Teardown(ctx =>
+{
+   Information("Finished running tasks.");
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// TASKS
+///////////////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does(() =>
+    .Does<PackageInfo>(data =>
 {
     DeleteFiles("./**/*.nupkg");
-	DeleteFiles("./**/*.nuspec");
+    DeleteFiles("./**/*.nuspec");
+    DeleteFiles(new DirectoryPath(data.BinDir).Combine("*").ToString());
+    if (DirectoryExists(data.BinDir))
+    {
+        DeleteDirectory(data.BinDir, new DeleteDirectorySettings {
+        Force = true
+        });
+    }
+    DeleteFiles(new DirectoryPath(data.TempDir).Combine("*").ToString());
+    if (DirectoryExists(data.TempDir))
+    {
+        DeleteDirectory(data.TempDir, new DeleteDirectorySettings {
+        Force = true
+        });
+    }
+});
+
+Task(".gitignore clean")
+    .Does<PackageInfo>(data =>
+{
+    var regexes = FileReadLines("./.gitignore");
+    foreach(var regex in regexes)
+    {
+        DeleteFiles(regex);
+    }
+});
+
+Task("Copy src to bin")
+    .Does<PackageInfo>(data =>
+{
+    if (!DirectoryExists(data.BinDir))
+    {
+        CreateDirectory(data.BinDir);
+    }
+    CopyFiles("src/*", data.BinDir);
+});
+
+Task("Set package args")
+    .IsDependentOn("Copy src to bin")
+    .Does<PackageInfo>(data =>
+{
+    ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${softwareName}", data.PackageSettings.Id);
+
+    string hash  = null;
+    string hash64 = null;
+    if (!DirectoryExists(data.TempDir))
+    {
+        CreateDirectory(data.TempDir);
+    }
+    if(!string.IsNullOrWhiteSpace(data.Package32Url))
+    {
+        Information("Download x86 binary");
+        var uri = new Uri(data.Package32Url);
+        var fileName = System.IO.Path.GetFileName(uri.LocalPath);
+        var fullFileName = new DirectoryPath(data.TempDir).Combine(fileName).ToString();
+        DownloadFile(data.Package32Url, fullFileName);
+        Information("Calculate sha256 for x86 binary");
+        hash = CalculateFileHash(fullFileName).ToHex();
+        Information("Write x86 data in sources");
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${url}", data.Package32Url);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksum}", hash);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksumType}", "sha256");
+    }
+    if(data.Package64Url == data.Package32Url && hash != null)
+    {
+        Information("x86 and x64 uri are the same");
+        Information("Write x64 data in sources");
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${url64bit}", data.Package64Url);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksum64}", hash);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksumType64}", "sha256");
+    }
+    else if(!string.IsNullOrWhiteSpace(data.Package64Url))
+    {
+        Information("Download x64 binary");
+        var uri = new Uri(data.Package64Url);
+        var fullFileName = System.IO.Path.Combine(data.TempDir, System.IO.Path.GetFileName(uri.LocalPath));
+        DownloadFile(data.Package64Url, fullFileName);
+        Information("Calculate sha256 for x86 binary");
+        hash64 = CalculateFileHash(fullFileName).ToHex();
+        Information("Write x64 data in sources");
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${url64bit}", data.Package64Url);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksum64}", hash64);
+        ReplaceTextInFiles(new DirectoryPath(data.BinDir).Combine("*").ToString(), "${checksumType64}", "sha256");
+    }
 });
 
 Task("Pack")
     .IsDependentOn("Clean")
-    .Does(() =>
+    .IsDependentOn("Set package args")
+    .Does<PackageInfo>(data =>
 {
-    ChocolateyPack(packageInfo);
+    ChocolateyPack(data.PackageSettings);
 });
 
 Task("Publish")
     .IsDependentOn("Pack")
-    .Does(() =>
+    .Does<PackageInfo>(data =>
 {
-	var publishKey = EnvironmentVariable<string>("CHOCOAPIKEY", null);
-    var package = $"{packageInfo.Id}.{packageInfo.Version}.nupkg";
+    var publishKey = EnvironmentVariable<string>("CHOCOAPIKEY", null);
+    var package = $"{data.PackageSettings.Id}.{data.PackageSettings.Version}.nupkg";
 
-    ChocolateyPush(package, new ChocolateyPushSettings {
+    ChocolateyPush(package, new ChocolateyPushSettings
+    {
         ApiKey = publishKey
     });
 });
+
+//////////////////////////////////////////////////////////////////////
+// EXECUTION
+//////////////////////////////////////////////////////////////////////
 
 RunTarget(target);
