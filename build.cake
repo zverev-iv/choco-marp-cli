@@ -1,4 +1,4 @@
-#addin nuget:?package=Cake.FileHelpers&version=4.0.1
+#addin nuget:?package=Cake.FileHelpers&version=6.0.0
 #addin nuget:?package=Cake.Json&version=7.0.1
 
 #load "lib/PackageInfo.cs"
