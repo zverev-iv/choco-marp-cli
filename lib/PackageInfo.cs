@@ -1,6 +1,5 @@
 public class PackageInfo
 {
-    public string PackageVersion { get; set; }
     public string Package32Url { get; set; }
     public string Package64Url { get; set; }
 

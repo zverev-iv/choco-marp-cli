@@ -24,6 +24,12 @@ Teardown(ctx =>
 // TASKS
 ///////////////////////////////////////////////////////////////////////////////
 
+Task("Print config")
+    .Does<PackageInfo>(data =>
+{
+	Information(SerializeJson<PackageInfo>(data));
+});
+
 Task("Clean")
     .Does<PackageInfo>(data =>
 {
@@ -43,12 +49,6 @@ Task("Clean")
         Force = true
         });
     }
-});
-
-Task("export info")
-    .Does<PackageInfo>(data =>
-{
-	Information(SerializeJson<PackageInfo>(data));
 });
 
 Task(".gitignore clean")
